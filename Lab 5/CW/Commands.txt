@@ -1,0 +1,134 @@
+2.2.2.4_Packet_Tracer_-_Configuring_IPv4_Static_and_Default_Routes_Instructions
+
+PC1:
+ping 172.31.0.254
+ping 172.31.1.190
+
+R1:
+en
+config t
+ip route 172.31.0.0 255.255.255.0 172.31.1.193
+ip route 172.31.1.128 255.255.255.192 172.31.1.193
+ip route 172.31.1.196 255.255.255.252 172.31.1.193
+
+R2:
+en
+config t
+ip route 172.31.1.0 255.255.255.128 s0/0/0
+ip route 172.31.1.128 255.255.255.192 s0/0/1
+
+R3:
+en
+config t
+ip route 0.0.0.0 0.0.0.0 s0/0/1
+
+
+
+2.2.5.5_Packet_Tracer_-_Configuring_Floating_Static_Routes_Instructions
+
+Edge_router:
+en
+config t
+ip route 0.0.0.0 0.0.0.0 s0/0/0
+exit
+show ip route
+
+tracert 198.0.0.10
+
+config t
+ip route 0.0.0.0 0.0.0.0 s0/0/1 5
+exit
+show ip route
+
+show run
+
+config t
+int s0/0/0
+shut
+ end
+
+show ip route
+
+PC - A:
+tracert 198.0.0.10
+
+Edge_Router:
+en
+config t
+int s0/0/0
+no shutdown
+
+PC - A:
+tracert 198.0.0.10
+
+Edge_Router:
+config t
+ipv6 unicast-routing
+
+ipv6 route ::/0 2001:DB8:A:2::1 5
+exit 
+show ipv6 route
+
+show run
+
+config t
+int s0/0/0
+shut
+end
+
+show ipv6 route
+
+PC - A:
+tracert 2001:DB8:F:F::10
+
+Edge_Router:
+en
+config t
+int s0/0/0
+no shutdown
+
+PC - A:
+tracert 2001:DB8:F:F::10
+
+
+
+7.3.1.8_Packet_Tracer_-_Configuring_RIPv2_Instructions
+
+R1: 
+en
+config t
+ip route 0.0.0.0 0.0.0.0 s0/0/1
+router rip
+version 2
+no auto-summary
+network 192.168.1.0
+network 192.168.2.0
+passive-interface g0/0
+default-information originate
+end
+copy run start
+
+R2: 
+en
+config t
+router rip
+version 2
+no auto-summary
+network 192.168.2.0
+network 192.168.3.0
+network 192.168.4.0
+passive-interface g0/0
+end
+copy run start
+
+R3:
+en
+config t
+router rip
+version 2
+no auto-summary
+network 192.168.4.0
+network 192.168.5.0
+passive-interface g0/0
+end
+copy run start
